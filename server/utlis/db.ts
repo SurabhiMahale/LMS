@@ -1,15 +1,17 @@
 import mongoose from "mongoose";
 require("dotenv").config();
-const dbUrl: string = process.env.DB_URL || '';
-const connectDB = async () =>{
-    try{
-        (await mongoose.connect(dbUrl)).isObjectIdOrHexString((data:any) =>{
-            console.log("Database connected successfully");
-        })
-    }catch(error:any)
-    {
-        console.log(error.message);
-        setTimeout(connectDB,5000);
+const dbUrl = process.env.DB_URL || '';
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(dbUrl, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        } as mongoose.ConnectOptions);
+        console.log("Successfully Connected to the database!");
+    } catch (error) {
+        console.error("Database connection error", error);
+        setTimeout(connectDB, 5000);
     }
 }
 export default connectDB;
